@@ -5,20 +5,15 @@ import classes from "./Table.module.css";
 const Table = ({ sportData }) => {
   const [sortedData, setSortedData] = useState([...sportData]);
   const [isActive, setIsActive] = useState(false);
+  const [sortValue, setSortValue] = useState("");
 
-  const sortCount = () => {
+  const sortNumber = () => {
     setIsActive(!isActive);
     setSortedData(
       sportData.sort((a, b) => {
-        return isActive ? a.count - b.count : b.count - a.count;
-      })
-    );
-  };
-  const sortDistance = () => {
-    setIsActive(!isActive);
-    setSortedData(
-      sportData.sort((a, b) => {
-        return isActive ? a.distance - b.distance : b.distance - a.distance;
+        return isActive
+          ? a[sortValue] - b[sortValue]
+          : b[sortValue] - a[sortValue];
       })
     );
   };
@@ -46,22 +41,39 @@ const Table = ({ sportData }) => {
         setSortedData={setSortedData}
         resetFilter={resetFilter}
       />
-      <table className={classes.table} align="center" width={800} border="1">
+      <table
+        className={classes.table}
+        align="center"
+        width="800"
+        height="500"
+        border="1"
+      >
         <thead>
           <tr>
             <th className={classes.title}>Дата</th>
             <th style={{ cursor: "pointer" }} onClick={sortName}>
               Название
             </th>
-            <th style={{ cursor: "pointer" }} onClick={sortCount}>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setSortValue("count");
+                sortNumber();
+              }}
+            >
               Количество
             </th>
-            <th style={{ cursor: "pointer" }} onClick={sortDistance}>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setSortValue("distance");
+                sortNumber();
+              }}
+            >
               Расстояние
             </th>
           </tr>
         </thead>
-
         <tbody>
           {sortedData.map((sport) => {
             return (
